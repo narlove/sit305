@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">MobileTaskTwo</string>
+    <string-array name="currency">
+        <item>USD</item>
+        <item>AUD</item>
+        <item>JPY</item>
+        <item>GBP</item>
+        <item>EUR</item>
+    </string-array>
+    <string-array name="mileage">
+        <item>MPG</item>
+        <item>Km/L</item>
+    </string-array>
+    <string-array name="volume">
+        <item>Gallon</item>
+        <item>Liters</item> <!-- using the american form here as that's what's provided on the task sheet -->
+        <!-- and because i identify converter to use based on text, it needs to be consistent -->
+    </string-array>
+    <string-array name="distance">
+        <item>Nautical Mile</item>
+        <item>Kilometers</item>
+    </string-array>
+    <string-array name="temperature">
+        <item>Celsius</item>
+        <item>Fahrenheit</item>
+        <item>Kelvin</item>
+    </string-array>
+</resources>
