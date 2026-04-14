@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CreateFragment">
+    tools:context=".fragments.EditFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,10 +12,10 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/createHeading"
+            android:id="@+id/editHeading"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Create Event"
+            android:text="Edit Event"
             android:textAlignment="center"
             android:textSize="36sp" />
 
@@ -71,7 +71,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:ems="10"
-            android:inputType="text" />
+            android:inputType="text"/>
 
         <TextView
             android:id="@+id/dateLabel"
@@ -108,6 +108,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:text="Submit" />
+            android:text="Submit changes" />
     </LinearLayout>
 </FrameLayout>

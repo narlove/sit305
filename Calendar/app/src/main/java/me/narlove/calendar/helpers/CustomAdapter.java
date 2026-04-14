@@ -7,7 +7,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
@@ -129,14 +128,14 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getItemTitle().setText(this.viewModel.getCurrentItemAtPosition(position).getTitle());
-        viewHolder.getItemCategory().setText(this.viewModel.getCurrentItemAtPosition(position).getCategory());
-        viewHolder.getItemLocation().setText(this.viewModel.getCurrentItemAtPosition(position).getLocation());
-        viewHolder.getItemDate().setText(this.viewModel.getCurrentItemAtPosition(position).getDateString());
+        viewHolder.getItemTitle().setText(this.viewModel.getItemCurrentlyAtPosition(position).getTitle());
+        viewHolder.getItemCategory().setText(this.viewModel.getItemCurrentlyAtPosition(position).getCategory());
+        viewHolder.getItemLocation().setText(this.viewModel.getItemCurrentlyAtPosition(position).getLocation());
+        viewHolder.getItemDate().setText(this.viewModel.getItemCurrentlyAtPosition(position).getDateString());
 
         if (tracker != null)
         {
-            viewHolder.bind(this.viewModel.getCurrentItemAtPosition(position), tracker.isSelected((long) position));
+            viewHolder.bind(this.viewModel.getItemCurrentlyAtPosition(position), tracker.isSelected((long) position));
         }
     }
 

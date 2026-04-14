@@ -25,6 +25,14 @@ public class EventsViewModel extends ViewModel {
         items.setValue(cur);
     }
 
+    public void replaceItem(Long id, SingleItem newItem)
+    {
+        this.removeItemById(id);
+        this.addItem(newItem);
+
+        // dont need to set items because calling our helper methods will do that for us
+    }
+
     public void removeItemByPosition(int position)
     {
         List<SingleItem> cur = items.getValue();
@@ -38,7 +46,7 @@ public class EventsViewModel extends ViewModel {
         items.setValue(cur);
     }
 
-    public SingleItem getCurrentItemAtPosition(int position)
+    public SingleItem getItemCurrentlyAtPosition(int position)
     {
         List<SingleItem> cur = items.getValue();
 
@@ -48,6 +56,11 @@ public class EventsViewModel extends ViewModel {
         }
 
         return cur.get(position);
+    }
+
+    public SingleItem getItemWithIdAtCurrentTime(long id)
+    {
+        return getItemCurrentlyAtPosition((int) id);
     }
 
     public int getCurrentDatasetLength()

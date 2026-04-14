@@ -19,11 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.GregorianCalendar;
-import java.util.List;
-
 import me.narlove.calendar.helpers.CustomAdapter;
 import me.narlove.calendar.helpers.CustomItemDetailsLookup;
 import me.narlove.calendar.R;
@@ -33,6 +28,7 @@ import me.narlove.calendar.helpers.EventsViewModel;
 public class DashboardFragment extends Fragment {
 
     private Button deleteButton;
+    private Button editButton;
 
     public DashboardFragment() {
         // Required empty public constructor
@@ -98,6 +94,48 @@ public class DashboardFragment extends Fragment {
                 }
             }
         });
+
+        editButton = view.findViewById(R.id.edit);
+
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (tracker.hasSelection())
+                {
+                    long id = DashboardFragment.getId(tracker);
+
+                    SingleItem selectedItem = viewModel.getItemWithIdAtCurrentTime(id);
+
+                    // need to swap to editfragment here passing details of selected item.
+                    EditFragment frag = EditFragment.newInstance(selectedItem.getTitle(),
+                            selectedItem.getCategory(), selectedItem.getLocation(), selectedItem.getDate(),
+                            id);
+
+                    frag.show(getParentFragmentManager(), "editpopup");
+                }
+            }
+        });
+    }
+
+    private static long getId(SelectionTracker<Long> tracker) {
+        long id = -1;
+
+        Selection<Long> selection = tracker.getSelection();
+
+        // this is a stupid work around because i have no idea what type selection
+        // is but its like an array but i cant access it with square brackets?
+        // i am not googling this i am just going with this method.
+        for (Long pos : selection)
+        {
+            id = pos;
+            break; // only one iteration as i limited selection capacity to 1
+        }
+
+        if (id == -1)
+        {
+            throw new RuntimeException("i have been working on this project way too long and i'm mostly confident this error wont raise");
+        }
+        return id;
     }
 
 }
