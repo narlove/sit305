@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="list_item_height">25dp</dimen>
+    <dimen name="margin_medium">10dp</dimen>
+    <dimen name="margin_none">0dp</dimen>
+    <dimen name="item_column_width">20dp</dimen>
+</resources>

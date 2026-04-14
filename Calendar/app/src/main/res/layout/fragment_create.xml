@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragments.CreateFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/createHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Create Event"
+            android:textAlignment="center"
+            android:textSize="36sp" />
+
+        <TextView
+            android:id="@+id/titleLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Event title"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/eventTitle"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/categoryLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Event category"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/eventCategory"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/locationLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Event location"
+            android:textSize="22sp" />
+
+        <EditText
+            android:id="@+id/eventLocation"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="Name" />
+
+        <TextView
+            android:id="@+id/dateLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Event date and time"
+            android:textSize="22sp" />
+
+        <Button
+            android:id="@+id/pickTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Select time" />
+
+        <Button
+            android:id="@+id/pickDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:text="Select Date" />
+
+        <Button
+            android:id="@+id/submitButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:text="Submit" />
+    </LinearLayout>
+</FrameLayout>
