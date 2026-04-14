@@ -7,10 +7,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import me.narlove.calendar.R;
@@ -18,9 +20,9 @@ import me.narlove.calendar.custom.SingleItem;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
-    // store the data here
-    private List<SingleItem> items;
     private SelectionTracker<Long> tracker;
+    private EventsViewModel viewModel;
+    private List<SingleItem> internalList = new ArrayList<>();
 
     /**
      * Provide a reference to the type of views that you are using
@@ -86,36 +88,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
     }
 
-    /**
-     * Initialize the dataset of the Adapter
-     *
-     * @param dataSet String[] containing the data to populate views to be used
-     * by RecyclerView
-     */
-    public CustomAdapter(List<SingleItem> dataSet) {
-        items = dataSet;
+    public CustomAdapter(EventsViewModel viewModel) {
+        this.viewModel = viewModel;
+    }
+
+    public void updateData(List<SingleItem> newItems)
+    {
+        this.internalList.clear();
+        this.internalList.addAll(newItems);
+        this.notifyDataSetChanged();
     }
 
     public void setSelectionTracker(SelectionTracker<Long> tracker)
     {
         this.tracker = tracker;
-    }
-
-    public void addItem(SingleItem item)
-    {
-        items.add(item);
-        notifyItemInserted(items.size() - 1);
-    }
-
-    public void removeItemByPosition(int position)
-    {
-        items.remove(position);
-        this.notifyItemRemoved(position + 1);
-    }
-
-    public void removeItemById(long position)
-    {
-        removeItemByPosition((int) position);
     }
 
     // required override
@@ -143,20 +129,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getItemTitle().setText(items.get(position).getTitle());
-        viewHolder.getItemCategory().setText(items.get(position).getCategory());
-        viewHolder.getItemLocation().setText(items.get(position).getLocation());
-        viewHolder.getItemDate().setText(items.get(position).getDateString());
+        viewHolder.getItemTitle().setText(this.viewModel.getCurrentItemAtPosition(position).getTitle());
+        viewHolder.getItemCategory().setText(this.viewModel.getCurrentItemAtPosition(position).getCategory());
+        viewHolder.getItemLocation().setText(this.viewModel.getCurrentItemAtPosition(position).getLocation());
+        viewHolder.getItemDate().setText(this.viewModel.getCurrentItemAtPosition(position).getDateString());
 
         if (tracker != null)
         {
-            viewHolder.bind(items.get(position), tracker.isSelected((long) position));
+            viewHolder.bind(this.viewModel.getCurrentItemAtPosition(position), tracker.isSelected((long) position));
         }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return items.size();
+        return this.viewModel.getCurrentDatasetLength();
     }
 }

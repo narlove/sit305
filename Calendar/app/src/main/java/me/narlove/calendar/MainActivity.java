@@ -10,12 +10,20 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import me.narlove.calendar.custom.SingleItem;
 import me.narlove.calendar.fragments.CreateFragment;
 import me.narlove.calendar.fragments.DashboardFragment;
 import me.narlove.calendar.helpers.CustomAdapter;
+import me.narlove.calendar.helpers.EventsViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +59,23 @@ public class MainActivity extends AppCompatActivity {
 
             return true;
         });
+
+        // need to create view model in main activity so that the fragments this activity encompasses
+        // has a reference to it (a viewmodel is bound to an activity and to access the same viewmodel
+        // across each fragment, they will have to pass a reference to the activity
+        EventsViewModel viewModel = new ViewModelProvider(this).get(EventsViewModel.class);
+
+        List<SingleItem> dataset = new ArrayList<>(Arrays.asList(
+                new SingleItem("Finish 4.1p", "Uni", "7 Edward St, Greensborough",
+                        new GregorianCalendar(2026, 4, 21, 15, 0, 0)
+                                .getTime()),
+
+                new SingleItem("Clean bedroom", "Home", "Home",
+                        new GregorianCalendar(2026, 4, 22, 15, 0, 0)
+                                .getTime())
+        ));
+
+        viewModel.setItems(dataset);
     }
 
     private void switchFragment(Fragment fragment)

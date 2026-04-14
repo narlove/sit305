@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.selection.Selection;
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
@@ -27,6 +28,7 @@ import me.narlove.calendar.helpers.CustomAdapter;
 import me.narlove.calendar.helpers.CustomItemDetailsLookup;
 import me.narlove.calendar.R;
 import me.narlove.calendar.custom.SingleItem;
+import me.narlove.calendar.helpers.EventsViewModel;
 
 public class DashboardFragment extends Fragment {
 
@@ -55,19 +57,10 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // handle recyclerview and associates
-        List<SingleItem> dataset = new ArrayList<>(Arrays.asList(
-                new SingleItem("Finish 4.1p", "Uni", "7 Edward St, Greensborough",
-                        new GregorianCalendar(2026, 4, 21, 15, 0, 0)
-                                .getTime()),
-
-                new SingleItem("Clean bedroom", "Home", "Home",
-                        new GregorianCalendar(2026, 4, 22, 15, 0, 0)
-                                .getTime())
-        ));
+        EventsViewModel viewModel = new ViewModelProvider(requireActivity()).get(EventsViewModel.class);
 
         RecyclerView recyclerView = view.findViewById(R.id.recycler);
-        CustomAdapter adapter = new CustomAdapter(dataset);
+        CustomAdapter adapter = new CustomAdapter(viewModel);
         adapter.setHasStableIds(true);
 
         recyclerView.setAdapter(adapter);
@@ -84,6 +77,11 @@ public class DashboardFragment extends Fragment {
 
         adapter.setSelectionTracker(tracker);
 
+        viewModel.getItems().observe(getViewLifecycleOwner(), newItems ->
+        {
+            adapter.updateData(newItems);
+        });
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(view.getContext());
 
         recyclerView.setLayoutManager(layoutManager);
@@ -96,7 +94,7 @@ public class DashboardFragment extends Fragment {
                 if (tracker.hasSelection())
                 {
                     Selection<Long> selection = tracker.getSelection();
-                    selection.forEach(adapter::removeItemById);
+                    selection.forEach(viewModel::removeItemById);
                 }
             }
         });
