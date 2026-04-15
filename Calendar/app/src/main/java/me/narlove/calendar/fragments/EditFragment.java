@@ -31,6 +31,7 @@ import me.narlove.calendar.custom.BrokenDateTime;
 import me.narlove.calendar.custom.SingleItem;
 import me.narlove.calendar.helpers.DatePickerFragment;
 import me.narlove.calendar.helpers.EventsViewModel;
+import me.narlove.calendar.helpers.EventsViewModelFactory;
 import me.narlove.calendar.helpers.TimePickerFragment;
 import me.narlove.calendar.listeners.CustomOnDateSetListener;
 import me.narlove.calendar.listeners.CustomOnTimeSetListener;
@@ -142,7 +143,8 @@ public class EditFragment extends DialogFragment {
         assignDatePicker();
         assignTimePicker();
 
-        EventsViewModel viewModel = new ViewModelProvider(requireActivity()).get(EventsViewModel.class);
+        EventsViewModelFactory factory = new EventsViewModelFactory(requireContext());
+        EventsViewModel viewModel = new ViewModelProvider(requireActivity(), factory).get(EventsViewModel.class);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,7 +170,7 @@ public class EditFragment extends DialogFragment {
                 {
                     // call edit
                     try {
-                        viewModel.replaceItem(id, new SingleItem(titleEntry.getText().toString(),
+                        viewModel.replaceItem(new SingleItem(id, titleEntry.getText().toString(),
                                 categoryEntry.getText().toString(),
                                 locationEntry.getText().toString(),
                                 broken.getMergedDateObject()));
@@ -195,9 +197,14 @@ public class EditFragment extends DialogFragment {
         CustomOnTimeSetListener timeSetListener = new CustomOnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                selectedTime = String.format("%d:%d", hourOfDay, minute);
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                cal.set(Calendar.MINUTE, minute);
+
+                String formattedTime = new SimpleDateFormat("HH:mm").format(cal.getTime());
+
                 // show for user
-                pickTime.setText(String.format("Selected: %s", selectedTime));
+                pickTime.setText(String.format("Selected: %s", formattedTime));
 
                 broken.setHour(hourOfDay);
                 broken.setMinute(minute);
@@ -217,8 +224,14 @@ public class EditFragment extends DialogFragment {
         CustomOnDateSetListener dateSetListener = new CustomOnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                selectedDate = String.format("%d/%d/%d", dayOfMonth, month, year);
-                pickDate.setText(String.format("Selected: %s", selectedDate));
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, month);
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String formattedTime = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
+
+                pickDate.setText(String.format("Selected: %s", formattedTime));
 
                 broken.setYear(year);
                 broken.setMonth(month);
@@ -229,7 +242,7 @@ public class EditFragment extends DialogFragment {
         pickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerFragment(dateSetListener).show(getActivity().getSupportFragmentManager(), "datePicker");
+                new DatePickerFragment(dateSetListener, false).show(getActivity().getSupportFragmentManager(), "datePicker");
             }
         });
     }

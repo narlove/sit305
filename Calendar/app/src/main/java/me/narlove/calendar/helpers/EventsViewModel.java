@@ -1,5 +1,7 @@
 package me.narlove.calendar.helpers;
 
+import android.content.Context;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -7,90 +9,52 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 import me.narlove.calendar.custom.SingleItem;
+import me.narlove.calendar.persistence.Repository;
 
 public class EventsViewModel extends ViewModel {
     // now we're storing the data here so that it can be accessed between fragments
-    private final MutableLiveData<List<SingleItem>> items = new MutableLiveData<>();
+    private final LiveData<List<SingleItem>> allItems;
+    private Repository repo;
 
-    public void addItem(SingleItem item)
-    {
-        List<SingleItem> cur = items.getValue();
-
-        if (cur == null)
-        {
-            throw new IllegalStateException("the list should never be null, this behaviour is not handled");
-        }
-
-        cur.add(item);
-        items.setValue(cur);
+    public EventsViewModel(Context context) {
+        repo = new Repository(context);
+        allItems = repo.getAllItems();
     }
 
-    public void replaceItem(Long id, SingleItem newItem)
-    {
-        this.removeItemById(id);
-        this.addItem(newItem);
-
-        // dont need to set items because calling our helper methods will do that for us
+    public void addItem(SingleItem item) {
+        repo.insert(item);
     }
 
-    public void removeItemByPosition(int position)
-    {
-        List<SingleItem> cur = items.getValue();
-
-        if (cur == null)
-        {
-            throw new IllegalStateException("the list should never be null, this behaviour is not handled");
-        }
-
-        cur.remove(position);
-        items.setValue(cur);
+    public void replaceItem(SingleItem item) {
+        repo.update(item);
     }
 
-    public SingleItem getItemCurrentlyAtPosition(int position)
-    {
-        List<SingleItem> cur = items.getValue();
-
-        if (cur == null)
-        {
-            throw new IllegalStateException("the list should never be null, this behaviour is not handled");
-        }
-
-        return cur.get(position);
+    public SingleItem getItemById(long id) {
+        return repo.getById(id);
     }
 
-    public SingleItem getItemWithIdAtCurrentTime(long id)
+    public long getItemIdByPosition(int position)
     {
-        return getItemCurrentlyAtPosition((int) id);
+        return getItemAtPosition(position).getId();
+    }
+
+    public SingleItem getItemAtPosition(int position)
+    {
+        return allItems.getValue().get(position);
     }
 
     public int getCurrentDatasetLength()
     {
-        List<SingleItem> cur = items.getValue();
-
-        if (cur == null)
-        {
-            throw new IllegalStateException("the list should never be null, this behaviour is not handled");
-        }
-
-        return cur.size();
-    }
-
-    /**
-     * Will override all current values in the list. Intended for use to initially populate list in debug.
-     * @param overrideItems Items to override the current data with.
-     */
-    public void setItems(List<SingleItem> overrideItems)
-    {
-        items.setValue(overrideItems);
+        return repo.size();
     }
 
     public LiveData<List<SingleItem>> getItems()
     {
-        return items;
+        return allItems;
     }
 
-    public void removeItemById(long position)
+    public void removeItemById(long id)
     {
-        removeItemByPosition((int) position);
+        repo.delete(getItemById(id));
     }
 }

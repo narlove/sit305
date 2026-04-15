@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.ItemKeyProvider;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -94,7 +95,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     public void updateData(List<SingleItem> newItems)
     {
         this.internalList.clear();
-        this.internalList.addAll(newItems);
+        if (newItems != null) {
+            this.internalList.addAll(newItems);
+        }
+
         this.notifyDataSetChanged();
     }
 
@@ -105,10 +109,38 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     // required override
     // https://proandroiddev.com/a-guide-to-recyclerview-selection-3ed9f2381504
-    // could possibly set to SQLite id once persistence layer set up
     @Override
     public long getItemId(int position) {
-        return (long) position;
+        if (position < 0 || position >= internalList.size()) {
+            return RecyclerView.NO_ID;
+        }
+
+        return internalList.get(position).getId();
+    }
+
+    public ItemKeyProvider<Long> getItemKeyProvider() {
+        return new ItemKeyProvider<Long>(ItemKeyProvider.SCOPE_MAPPED) {
+            @Nullable
+            @Override
+            public Long getKey(int position) {
+                if (position < 0 || position >= internalList.size()) {
+                    return null;
+                }
+
+                return internalList.get(position).getId();
+            }
+
+            @Override
+            public int getPosition(@NonNull Long key) {
+                for (int i = 0; i < internalList.size(); i++) {
+                    if (internalList.get(i).getId() == key) {
+                        return i;
+                    }
+                }
+
+                return RecyclerView.NO_POSITION;
+            }
+        };
     }
 
     // Create new views (invoked by the layout manager)
@@ -126,22 +158,24 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
 
+        SingleItem item = internalList.get(position);
+
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getItemTitle().setText(this.viewModel.getItemCurrentlyAtPosition(position).getTitle());
-        viewHolder.getItemCategory().setText(this.viewModel.getItemCurrentlyAtPosition(position).getCategory());
-        viewHolder.getItemLocation().setText(this.viewModel.getItemCurrentlyAtPosition(position).getLocation());
-        viewHolder.getItemDate().setText(this.viewModel.getItemCurrentlyAtPosition(position).getDateString());
+        viewHolder.getItemTitle().setText(item.getTitle());
+        viewHolder.getItemCategory().setText(item.getCategory());
+        viewHolder.getItemLocation().setText(item.getLocation());
+        viewHolder.getItemDate().setText(item.getDateString());
 
         if (tracker != null)
         {
-            viewHolder.bind(this.viewModel.getItemCurrentlyAtPosition(position), tracker.isSelected((long) position));
+            viewHolder.bind(item, tracker.isSelected(item.getId()));
         }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return this.viewModel.getCurrentDatasetLength();
+        return internalList.size();
     }
 }

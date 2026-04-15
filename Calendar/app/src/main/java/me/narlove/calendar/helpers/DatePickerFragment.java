@@ -16,10 +16,12 @@ import me.narlove.calendar.listeners.CustomOnDateSetListener;
 public class DatePickerFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     private final CustomOnDateSetListener listener;
+    private boolean shouldLimitMin;
 
-    public DatePickerFragment(CustomOnDateSetListener listener)
+    public DatePickerFragment(CustomOnDateSetListener listener, boolean shouldLimitMin)
     {
         this.listener = listener;
+        this.shouldLimitMin = shouldLimitMin;
     }
 
     @Override
@@ -35,6 +37,9 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
         int month = c.get(Calendar.MONTH);
         int day = c.get(Calendar.DAY_OF_MONTH);
 
-        return new DatePickerDialog(requireContext(), this, year, month, day);
+        DatePickerDialog dialog = new DatePickerDialog(requireContext(), this, year, month, day);
+        if (shouldLimitMin) dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
+        return dialog;
     }
 }

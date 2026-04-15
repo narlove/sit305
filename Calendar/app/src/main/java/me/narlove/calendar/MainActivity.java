@@ -24,6 +24,7 @@ import me.narlove.calendar.fragments.CreateFragment;
 import me.narlove.calendar.fragments.DashboardFragment;
 import me.narlove.calendar.helpers.CustomAdapter;
 import me.narlove.calendar.helpers.EventsViewModel;
+import me.narlove.calendar.helpers.EventsViewModelFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -63,19 +64,8 @@ public class MainActivity extends AppCompatActivity {
         // need to create view model in main activity so that the fragments this activity encompasses
         // has a reference to it (a viewmodel is bound to an activity and to access the same viewmodel
         // across each fragment, they will have to pass a reference to the activity
-        EventsViewModel viewModel = new ViewModelProvider(this).get(EventsViewModel.class);
-
-        List<SingleItem> dataset = new ArrayList<>(Arrays.asList(
-                new SingleItem("Finish 4.1p", "Uni", "7 Edward St, Greensborough",
-                        new GregorianCalendar(2026, 4, 21, 15, 0, 0)
-                                .getTime()),
-
-                new SingleItem("Clean bedroom", "Home", "Home",
-                        new GregorianCalendar(2026, 4, 22, 15, 0, 0)
-                                .getTime())
-        ));
-
-        viewModel.setItems(dataset);
+        EventsViewModelFactory factory = new EventsViewModelFactory(getApplicationContext());
+        EventsViewModel viewModel = new ViewModelProvider(this, factory).get(EventsViewModel.class);
     }
 
     private void switchFragment(Fragment fragment)

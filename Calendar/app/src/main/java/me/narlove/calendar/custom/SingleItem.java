@@ -1,14 +1,22 @@
 package me.narlove.calendar.custom;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Entity(tableName = "items")
 public class SingleItem {
-    private final String title;
-    private final String category;
-    private final String location;
-    private final Date date;
+    @PrimaryKey(autoGenerate = true)
+    private long id;
+
+    private String title;
+    private String category;
+    private String location;
+    private Date date;
 
     public SingleItem(String title, String category, String location,
                       Date date)
@@ -17,6 +25,22 @@ public class SingleItem {
         this.category = category;
         this.location = location;
         this.date = date;
+    }
+
+    @Ignore
+    public SingleItem(long id, String title, String category, String location,
+                      Date date)
+    {
+        this.id = id;
+        this.title = title;
+        this.category = category;
+        this.location = location;
+        this.date = date;
+    }
+
+    public long getId()
+    {
+        return id;
     }
 
     public String getTitle() {
@@ -47,5 +71,25 @@ public class SingleItem {
         DateFormat df = new SimpleDateFormat(pattern);
 
         return df.format(this.date);
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

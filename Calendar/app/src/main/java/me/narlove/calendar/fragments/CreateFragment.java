@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.InvalidClassException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Objects;
@@ -29,6 +31,7 @@ import me.narlove.calendar.custom.SingleItem;
 import me.narlove.calendar.helpers.DatePickerFragment;
 import me.narlove.calendar.R;
 import me.narlove.calendar.helpers.EventsViewModel;
+import me.narlove.calendar.helpers.EventsViewModelFactory;
 import me.narlove.calendar.helpers.TimePickerFragment;
 import me.narlove.calendar.listeners.CustomOnDateSetListener;
 import me.narlove.calendar.listeners.CustomOnTimeSetListener;
@@ -79,7 +82,8 @@ public class CreateFragment extends Fragment {
         assignTimePicker();
 
         broken = new BrokenDateTime();
-        EventsViewModel viewModel = new ViewModelProvider(requireActivity()).get(EventsViewModel.class);
+        EventsViewModelFactory factory = new EventsViewModelFactory(requireContext());
+        EventsViewModel viewModel = new ViewModelProvider(requireActivity(), factory).get(EventsViewModel.class);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,6 +119,9 @@ public class CreateFragment extends Fragment {
 
                     // swap fragments
                     ((BottomNavigationView) requireActivity().findViewById(R.id.bottomNavigationView)).setSelectedItemId(R.id.dashboard);
+                } else
+                {
+                    Toast.makeText(getContext(), "please ensure all fields are filled out correctly.", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -133,9 +140,14 @@ public class CreateFragment extends Fragment {
         CustomOnTimeSetListener timeSetListener = new CustomOnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                selectedTime = String.format("%d:%d", hourOfDay, minute);
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                cal.set(Calendar.MINUTE, minute);
+
+                String formattedTime = new SimpleDateFormat("HH:mm").format(cal.getTime());
+
                 // show for user
-                pickTime.setText(String.format("Selected: %s", selectedTime));
+                pickTime.setText(String.format("Selected: %s", formattedTime));
 
                 broken.setHour(hourOfDay);
                 broken.setMinute(minute);
@@ -155,8 +167,14 @@ public class CreateFragment extends Fragment {
         CustomOnDateSetListener dateSetListener = new CustomOnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                selectedDate = String.format("%d/%d/%d", dayOfMonth, month, year);
-                pickDate.setText(String.format("Selected: %s", selectedDate));
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, month);
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+                String formattedTime = new SimpleDateFormat("dd/MM/yyyy").format(cal.getTime());
+
+                pickDate.setText(String.format("Selected: %s", formattedTime));
 
                 broken.setYear(year);
                 broken.setMonth(month);
@@ -167,7 +185,7 @@ public class CreateFragment extends Fragment {
         pickDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new DatePickerFragment(dateSetListener).show(getActivity().getSupportFragmentManager(), "datePicker");
+                new DatePickerFragment(dateSetListener, true).show(getActivity().getSupportFragmentManager(), "datePicker");
             }
         });
     }

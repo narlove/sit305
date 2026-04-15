@@ -18,12 +18,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import me.narlove.calendar.helpers.CustomAdapter;
 import me.narlove.calendar.helpers.CustomItemDetailsLookup;
 import me.narlove.calendar.R;
 import me.narlove.calendar.custom.SingleItem;
 import me.narlove.calendar.helpers.EventsViewModel;
+import me.narlove.calendar.helpers.EventsViewModelFactory;
 
 public class DashboardFragment extends Fragment {
 
@@ -53,18 +55,19 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        EventsViewModel viewModel = new ViewModelProvider(requireActivity()).get(EventsViewModel.class);
+        EventsViewModelFactory factory = new EventsViewModelFactory(requireContext());
+        EventsViewModel viewModel = new ViewModelProvider(requireActivity(), factory).get(EventsViewModel.class);
 
-        RecyclerView recyclerView = view.findViewById(R.id.recycler);
         CustomAdapter adapter = new CustomAdapter(viewModel);
         adapter.setHasStableIds(true);
+        RecyclerView recyclerView = view.findViewById(R.id.recycler);
 
         recyclerView.setAdapter(adapter);
 
         SelectionTracker<Long> tracker = new SelectionTracker.Builder<Long>(
                 "mySelection",
                 recyclerView,
-                new StableIdKeyProvider(recyclerView),
+                adapter.getItemKeyProvider(),
                 new CustomItemDetailsLookup(recyclerView),
                 StorageStrategy.createLongStorage()
         )
@@ -89,8 +92,13 @@ public class DashboardFragment extends Fragment {
             public void onClick(View v) {
                 if (tracker.hasSelection())
                 {
-                    Selection<Long> selection = tracker.getSelection();
-                    selection.forEach(viewModel::removeItemById);
+                    long id = DashboardFragment.getId(tracker);
+
+                    tracker.clearSelection();
+
+                    viewModel.removeItemById(id);
+
+                    Toast.makeText(getContext(), "Successfully deleted", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -104,7 +112,7 @@ public class DashboardFragment extends Fragment {
                 {
                     long id = DashboardFragment.getId(tracker);
 
-                    SingleItem selectedItem = viewModel.getItemWithIdAtCurrentTime(id);
+                    SingleItem selectedItem = viewModel.getItemById(id);
 
                     // need to swap to editfragment here passing details of selected item.
                     EditFragment frag = EditFragment.newInstance(selectedItem.getTitle(),
