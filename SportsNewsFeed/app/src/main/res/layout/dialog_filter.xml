@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Sports Category"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp" />
+
+    <CheckBox
+        android:id="@+id/checkFootball"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Football" />
+
+    <CheckBox
+        android:id="@+id/checkBasketball"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Basketball" />
+
+    <CheckBox
+        android:id="@+id/checkCricket"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cricket" />
+
+    <CheckBox
+        android:id="@+id/checkSoccer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Soccer" />
+
+    <CheckBox
+        android:id="@+id/checkTennis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tennis" />
+
+    <CheckBox
+        android:id="@+id/checkBoxing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Boxing" />
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"
+        android:text="Confirm" />
+
+</LinearLayout>
