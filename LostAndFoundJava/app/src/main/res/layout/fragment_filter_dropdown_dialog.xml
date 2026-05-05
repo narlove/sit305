@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".fragments.FilterDropdownDialogFragment"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:minWidth="300dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Select post category"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/checkWallets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Wallets" />
+
+    <CheckBox
+        android:id="@+id/checkPets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pets" />
+
+    <CheckBox
+        android:id="@+id/checkElectronics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Electronics" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Select post type"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <CheckBox
+        android:id="@+id/checkLost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Lost" />
+
+    <CheckBox
+        android:id="@+id/checkFound"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Found" />
+
+    <Button
+        android:id="@+id/btnConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginTop="16dp"
+        android:text="Confirm" />
+
+</LinearLayout>
