@@ -28,6 +28,14 @@
             android:layout_marginBottom="@dimen/external"
             android:text="Set filters" />
 
+        <Button
+            android:id="@+id/setRadiusButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/external"
+            android:layout_marginBottom="@dimen/external"
+            android:text="Set radius" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/viewRecycler"
             android:layout_width="match_parent"

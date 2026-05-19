@@ -1,16 +1,25 @@
 package me.narlove.lostandfoundjava.fragments;
 
+import static android.location.Location.FORMAT_DEGREES;
 import static me.narlove.lostandfoundjava.utilities.GenericUtils.formatTimestampAsString;
 import static me.narlove.lostandfoundjava.utilities.GenericUtils.switchFragment;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.util.Preconditions;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -27,7 +36,29 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AutocompletePrediction;
+import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
+import com.google.android.libraries.places.api.model.CircularBounds;
+import com.google.android.libraries.places.api.model.LocationBias;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.FetchPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.api.net.SearchNearbyRequest;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.PlaceAutocomplete;
+import com.google.android.libraries.places.widget.PlaceAutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
+
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -35,6 +66,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import me.narlove.lostandfoundjava.BuildConfig;
 import me.narlove.lostandfoundjava.R;
 import me.narlove.lostandfoundjava.persistence.Post;
 import me.narlove.lostandfoundjava.utilities.GenericUtils;
@@ -56,6 +88,7 @@ public class CreateFragment extends Fragment {
     private EditText descriptionEntry;
     private Button selectDateButton;
     private EditText locationEntry;
+    private Button selectCurrentLocationButton;
     private Button selectPhotoButton;
     private Spinner categorySpinner;
     private Button submitButton;
@@ -66,9 +99,16 @@ public class CreateFragment extends Fragment {
     private Date selectedDate;
     @Nullable
     private Uri selectedImageUri;
+    private Place selectedPlace;
 
     private DatabaseViewModel dbvm;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private ActivityResultLauncher<String[]> requestLocationPermissions;
+    private ActivityResultLauncher<Intent> placeAutocomplete;
+
+    private FusedLocationProviderClient fusedLocationClient;
+    private Location lastKnownLocation;
+    private PlacesClient placesClient;
 
     public CreateFragment() {
         // Required empty public constructor
@@ -100,6 +140,59 @@ public class CreateFragment extends Fragment {
                     selectPhotoButton.setText("Select image (selected)");
                 }
             });
+
+        requestLocationPermissions =
+                registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), isGranted ->
+                {
+                    if (isGranted.containsValue(false))
+                    {
+                        // this function will only be called once view is created so i can reference
+                        // view objects
+                        Toast.makeText(requireContext(), "Cannot use 'Get current location' button because you have not" +
+                                "accepted the location permission.", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        assignCurrentLocation();
+                    }
+                });
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+
+        // Create a new PlacesClient instance
+        placesClient = Places.createClient(requireContext());
+
+        placeAutocomplete = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                Intent intent = result.getData();
+
+                if (result.getResultCode() == PlaceAutocompleteActivity.RESULT_OK) {
+                    // get prediction object
+                    if (intent == null) return;
+
+                    AutocompletePrediction prediction =
+                            PlaceAutocomplete.getPredictionFromIntent(intent);
+
+                    AutocompleteSessionToken sessionToken =
+                            PlaceAutocomplete.getSessionTokenFromIntent(intent);
+
+                    FetchPlaceRequest request =
+                            FetchPlaceRequest.builder(prediction.getPlaceId(),
+                                            Arrays.asList(Place.Field.DISPLAY_NAME,
+                                                    Place.Field.ADDRESS_COMPONENTS,
+                                                    Place.Field.ID,
+                                                    Place.Field.LOCATION))
+                                    .setSessionToken(sessionToken)
+                                    .build();
+
+                    placesClient.fetchPlace(request).addOnSuccessListener(requireActivity(),
+                            res ->
+                    {
+                        selectedPlace = res.getPlace();
+                        locationEntry.setText(selectedPlace.getDisplayName());
+                    });
+                }
+            });
     }
 
     @Override
@@ -116,9 +209,12 @@ public class CreateFragment extends Fragment {
         descriptionEntry = v.findViewById(R.id.descriptionEntry);
         selectDateButton = v.findViewById(R.id.selectDate);
         locationEntry = v.findViewById(R.id.locationEntry);
+        selectCurrentLocationButton = v.findViewById(R.id.selectCurrentLocation);
         selectPhotoButton = v.findViewById(R.id.selectImage);
         categorySpinner = v.findViewById(R.id.categoryEntry);
         submitButton = v.findViewById(R.id.submitButton);
+
+        locationEntry.setFocusable(false);
 
         // populate category spinner
         List<String> enumValues = Stream.of(PostCategory.values())
@@ -165,9 +261,89 @@ public class CreateFragment extends Fragment {
                     .build());
         });
 
+        selectCurrentLocationButton.setOnClickListener(clicked ->
+        {
+            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED)
+            {
+                assignCurrentLocation();
+            }
+            else
+            {
+                // request access to both permissions
+                requestLocationPermissions.launch(new String[] { Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION });
+            }
+        });
+
+        locationEntry.setOnClickListener(clicked ->
+        {
+            LatLng center = new LatLng(-37.840935, 144.946457);
+            CircularBounds circle = CircularBounds.newInstance(center, /* radius = */ 5000);
+
+            // Build and launch the intent with fullscreen mode
+            Intent intent = new PlaceAutocomplete.IntentBuilder()
+                    .setCountries(Arrays.asList("au"))
+                    .setLocationBias(circle)
+                    .build(requireContext());
+
+            placeAutocomplete.launch(intent);
+        });
+
         submitButton.setOnClickListener(clicked -> handleSubmit());
 
         return v;
+    }
+
+    private void assignCurrentLocation()
+    {
+        // proceed with getting the users current location, we have the permission.
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(requireActivity(), new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        CreateFragment.this.lastKnownLocation = location;
+
+                        if (location != null)
+                        {
+                            LatLng userLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            CircularBounds circle = CircularBounds.newInstance(userLatLng, 100);
+
+                            List<Place.Field> placeFields = Arrays.asList(
+                                    Place.Field.DISPLAY_NAME,
+                                    Place.Field.ADDRESS_COMPONENTS,
+                                    Place.Field.ID,
+                                    Place.Field.LOCATION);
+
+                            SearchNearbyRequest searchNearbyRequest = SearchNearbyRequest.builder(circle, placeFields)
+                                    .setMaxResultCount(1)
+                                    .build();
+
+                            placesClient.searchNearby(searchNearbyRequest)
+                                    .addOnSuccessListener(response -> {
+                                        List<Place> places = response.getPlaces();
+                                        // we use a for loop but really its just one place object
+                                        for (Place place : places) {
+                                            selectedPlace = place;
+                                            locationEntry.setText("Your current location!");
+                                        }
+                                    })
+                                    .addOnFailureListener(exception -> {
+                                        if (exception instanceof ApiException) {
+                                            Toast.makeText(requireContext(), "could not identify location name," +
+                                                    " please enter using autocomplete", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void handleSubmit()
@@ -182,16 +358,16 @@ public class CreateFragment extends Fragment {
         // Date selectedDate
         // Uri selectedImageUri;
 
-        String location = locationEntry.getText().toString();
         PostCategory category = PostCategory.fromSpinnerVal(categorySpinner.getSelectedItem().toString());
 
         // perform validation
         // the only validation we want is that postName, postType, selectedDate, selectedPhoto, category cannot be null.
-        if (checkedPostTypeId == -1 || areAnyNull(postName, selectedDate, selectedImageUri, category))
+        if (checkedPostTypeId == -1 || areAnyNull(postName, selectedDate, selectedImageUri, category,
+                selectedPlace))
         {
             Toast.makeText(requireContext(),
                     "One or more required values have been incorrectly entered or are empty. Please fix this. No changes have been saved.",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
 
             return;
         }
@@ -208,7 +384,7 @@ public class CreateFragment extends Fragment {
         // use instance variable view model reference to add to the databaseselectedPhoto
 
         Post toInsert = new Post(postType, category, postName, phone, description,
-                safeDate, location, uploadTimestamp, safeUri);
+                safeDate, selectedPlace.getId(), uploadTimestamp, safeUri);
 
         dbvm.insert(toInsert);
 

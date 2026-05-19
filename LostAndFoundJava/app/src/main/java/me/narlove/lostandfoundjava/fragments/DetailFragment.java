@@ -11,10 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.FetchPlaceRequest;
+import com.google.android.libraries.places.api.net.PlacesClient;
+
+import java.util.Arrays;
 
 import me.narlove.lostandfoundjava.R;
-import me.narlove.lostandfoundjava.utilities.PostCategory;
-import me.narlove.lostandfoundjava.utilities.PostType;
 
 // this class is so bad but i cant perform database lookup on the main ui thread and i couldn't
 // be bothered just passing the idea and then making a callback function.
@@ -25,7 +29,7 @@ public class DetailFragment extends Fragment {
     private static final String ARG_POSTCONTACTPHONE = "postcontactphone";
     private static final String ARG_POSTDESCRIPTION = "postdescription";
     private static final String ARG_POSTDATE = "postdate";
-    private static final String ARG_POSTLOCATION = "postlocation";
+    private static final String ARG_POSTPLACEID = "postplaceid";
     private static final String ARG_POSTUPLOADDATE = "postuploaddate";
     private static final String ARG_IMAGEURI = "imageuri";
 
@@ -33,9 +37,11 @@ public class DetailFragment extends Fragment {
     private String postContactPhone;
     private String postDescription;
     private String postDate;
-    private String postLocation;
+    private String postPlaceId;
     private String postUploadDate;
     private String imageUri;
+
+    private PlacesClient placesClient;
 
     public DetailFragment() {
         // Required empty public constructor
@@ -45,7 +51,7 @@ public class DetailFragment extends Fragment {
                                              String postContactPhone,
                                              String postDescription,
                                              String postDate,
-                                             String postLocation,
+                                             String postLocationName,
                                              String postUploadDate,
                                              String imageUri) {
         DetailFragment fragment = new DetailFragment();
@@ -54,7 +60,7 @@ public class DetailFragment extends Fragment {
         args.putString(ARG_POSTCONTACTPHONE, postContactPhone);
         args.putString(ARG_POSTDESCRIPTION, postDescription);
         args.putString(ARG_POSTDATE, postDate);
-        args.putString(ARG_POSTLOCATION, postLocation);
+        args.putString(ARG_POSTPLACEID, postLocationName);
         args.putString(ARG_POSTUPLOADDATE, postUploadDate);
         args.putString(ARG_IMAGEURI, imageUri);
         fragment.setArguments(args);
@@ -69,10 +75,12 @@ public class DetailFragment extends Fragment {
             postContactPhone = getArguments().getString(ARG_POSTCONTACTPHONE);
             postDescription = getArguments().getString(ARG_POSTDESCRIPTION);
             postDate = getArguments().getString(ARG_POSTDATE);
-            postLocation = getArguments().getString(ARG_POSTLOCATION);
             postUploadDate = getArguments().getString(ARG_POSTUPLOADDATE);
             imageUri = getArguments().getString(ARG_IMAGEURI);
+            postPlaceId = getArguments().getString(ARG_POSTPLACEID, null);
         }
+
+        placesClient = Places.createClient(requireActivity());
     }
 
     @Override
@@ -85,7 +93,19 @@ public class DetailFragment extends Fragment {
         ((TextView) v.findViewById(R.id.fPostContactPhone)).setText(postContactPhone);
         ((TextView) v.findViewById(R.id.fPostDescription)).setText(postDescription);
         ((TextView) v.findViewById(R.id.fPostDate)).setText(postDate);
-        ((TextView) v.findViewById(R.id.fPostLocation)).setText(postLocation);
+        // get the place name
+        if (postPlaceId != null) // else do not fill it with anything
+        {
+            ((TextView) v.findViewById(R.id.fPostLocation)).setText("loading...");
+            FetchPlaceRequest request = FetchPlaceRequest.newInstance(postPlaceId,
+                    Arrays.asList(Place.Field.DISPLAY_NAME));
+
+            placesClient.fetchPlace(request)
+                    .addOnSuccessListener(requireActivity(), res ->
+                            ((TextView) v.findViewById(R.id.fPostLocation))
+                                    .setText(res.getPlace().getDisplayName()));
+        }
+
         ((TextView) v.findViewById(R.id.fPostUploadDate)).setText(postUploadDate);
 
         ImageView imageView = v.findViewById(R.id.fImage);

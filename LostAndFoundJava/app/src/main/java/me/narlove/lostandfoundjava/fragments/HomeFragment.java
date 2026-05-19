@@ -16,6 +16,7 @@ public class HomeFragment extends Fragment {
 
     private Button createButton;
     private Button viewButton;
+    private Button mapButton;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -29,12 +30,16 @@ public class HomeFragment extends Fragment {
 
         createButton = v.findViewById(R.id.newAdvertButton);
         viewButton = v.findViewById(R.id.viewAdvertsButton);
+        mapButton = v.findViewById(R.id.viewMapButton);
 
         createButton.setOnClickListener(clicked ->
                 GenericUtils.switchFragment(this, new CreateFragment(), true));
 
         viewButton.setOnClickListener(clicked ->
             GenericUtils.switchFragment(this, new ViewFragment(), true));
+
+        mapButton.setOnClickListener(clicked ->
+                GenericUtils.switchFragment(this, new MapFragment(), true));
 
         return v;
     }

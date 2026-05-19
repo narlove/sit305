@@ -1,6 +1,10 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.google.android.libraries.mapsplatform.secrets.gradle.plugin)
 }
+
+def properties = new Properties();
+properties.load(new FileInputStream(rootProject.file("local.properties")))
 
 android {
     namespace 'me.narlove.lostandfoundjava'
@@ -18,6 +22,16 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "PLACES_API_KEY", properties['PLACES_API_KEY']
+
+        manifestPlaceholders = [
+                PLACES_API_KEY: "placeholder"
+        ]
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
@@ -34,6 +48,8 @@ android {
 
 dependencies {
     implementation libs.recyclerview
+    implementation libs.places
+    implementation libs.play.services.maps
     def room_version = "2.8.4"
 
     implementation "androidx.room:room-runtime:$room_version"
@@ -42,6 +58,9 @@ dependencies {
     def glide_version = "5.0.7"
     implementation "com.github.bumptech.glide:glide:$glide_version"
     annotationProcessor "com.github.bumptech.glide:compiler:$glide_version"
+
+    // implementation 'com.google.android.gms:play-services-location:21.3.0'
+    implementation 'com.google.android.libraries.places:places:latest'
 
     implementation libs.appcompat
     implementation libs.material

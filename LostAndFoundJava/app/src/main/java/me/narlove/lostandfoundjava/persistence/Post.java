@@ -7,9 +7,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
-import java.time.Instant;
-import java.util.Date;
+import com.google.android.libraries.places.api.model.Place;
 
 import me.narlove.lostandfoundjava.utilities.PostCategory;
 import me.narlove.lostandfoundjava.utilities.PostType;
@@ -24,7 +22,7 @@ public class Post {
     private String postContactPhone;
     private String postDescription;
     private String postDate;
-    private String postLocation;
+    private String postPlaceId;
     // https://developer.android.com/develop/ui/compose/components/datepickers
     private String postUploadDate; // use android date picker and format as string using genericutils
     // image picker will provide uri of uploaded image
@@ -36,7 +34,7 @@ public class Post {
                 String postContactPhone,
                 String postDescription,
                 String postDate,
-                String postLocation,
+                String postPlaceId,
                 String postUploadDate,
                 String imageUri) {
         this.postType = postType;
@@ -45,7 +43,7 @@ public class Post {
         this.postContactPhone = postContactPhone;
         this.postDescription = postDescription;
         this.postDate = postDate;
-        this.postLocation = postLocation;
+        this.postPlaceId = postPlaceId;
         this.postUploadDate = postUploadDate;
         this.imageUri = imageUri;
     }
@@ -142,12 +140,12 @@ public class Post {
         this.postDate = postDate;
     }
 
-    public String getPostLocation() {
-        return postLocation;
+    public String getPostPlaceId() {
+        return postPlaceId;
     }
 
-    public void setPostLocation(String postLocation) {
-        this.postLocation = postLocation;
+    public void setPostPlaceId(String postPlaceId) {
+        this.postPlaceId = postPlaceId;
     }
 
     public String getPostUploadDate() {
