@@ -22,7 +22,8 @@ public class Task {
     private String genRes;
     private String taskDesc;
 
-    public Task(Interest interest, String genPrompt, String genRes, String taskDesc) {
+    public Task(long owningUserId, Interest interest, String genPrompt, String genRes, String taskDesc) {
+        this.owningUserId = owningUserId;
         this.interest = interest;
         this.genPrompt = genPrompt;
         this.genRes = genRes;

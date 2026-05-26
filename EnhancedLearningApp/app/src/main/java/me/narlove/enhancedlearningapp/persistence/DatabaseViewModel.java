@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 import me.narlove.enhancedlearningapp.datatypes.Interest;
+import me.narlove.enhancedlearningapp.datatypes.Question;
 import me.narlove.enhancedlearningapp.datatypes.Task;
 import me.narlove.enhancedlearningapp.datatypes.User;
 import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUserIdCallback;
@@ -92,6 +93,11 @@ public class DatabaseViewModel extends AndroidViewModel {
     public void insertTask(Task task)
     {
         this.repo.insertTask(task);
+    }
+
+    public void insertTaskWithQuestions(Task task, List<Question> questions)
+    {
+        this.repo.insertTaskWithQuestions(task, questions);
     }
 
     public LiveData<Integer> getNumberOfTasksByUserId(long uid)

@@ -16,11 +16,13 @@ import me.narlove.enhancedlearningapp.datatypes.Task;
 public class CustomAdapter extends ListAdapter<Task, CustomAdapter.ViewHolder>
 {
     private Context context;
+    private OnRecyclerItemClick listener;
 
-    public CustomAdapter(Context context)
+    public CustomAdapter(Context context, OnRecyclerItemClick listener)
     {
         super(Task.DIFF_CALLBACK);
         this.context = context;
+        this.listener = listener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder
@@ -33,6 +35,15 @@ public class CustomAdapter extends ListAdapter<Task, CustomAdapter.ViewHolder>
             super(itemView);
             taskTitle = itemView.findViewById(R.id.taskTitle);
             taskDesc = itemView.findViewById(R.id.taskDescription);
+
+            itemView.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    Task item = getItem(position);
+
+                    listener.clicked(item.getTaskId());
+                }
+            });
         }
     }
 
@@ -48,7 +59,7 @@ public class CustomAdapter extends ListAdapter<Task, CustomAdapter.ViewHolder>
     public void onBindViewHolder(@NonNull ViewHolder holder, int position)
     {
         Task task = getItem(position);
-        holder.taskTitle.setText(String.format("Generated Task %s", task.getTaskId()));
+        holder.taskTitle.setText(String.format("Generated Task %d", task.getTaskId()));
         holder.taskDesc.setText(task.getTaskDesc());
     }
 
