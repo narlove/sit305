@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase;
 import me.narlove.enhancedlearningapp.datatypes.Question;
 import me.narlove.enhancedlearningapp.datatypes.Task;
 import me.narlove.enhancedlearningapp.datatypes.User;
+import me.narlove.enhancedlearningapp.persistence.daos.QuestionDao;
 import me.narlove.enhancedlearningapp.persistence.daos.TaskDao;
 import me.narlove.enhancedlearningapp.persistence.daos.UserDao;
 
@@ -13,4 +14,5 @@ import me.narlove.enhancedlearningapp.persistence.daos.UserDao;
 public abstract class AppDatabase extends RoomDatabase {
     public abstract UserDao userDao();
     public abstract TaskDao taskDao();
+    public abstract QuestionDao questionDao();
 }

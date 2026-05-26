@@ -77,15 +77,16 @@ public class TaskFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            taskId = getArguments().getLong(ARG_TID, -1);
-        }
+        if (getArguments() == null) throw new IllegalStateException("taskfragment cannot be called by constructor");
+
+        taskId = getArguments().getLong(ARG_TID, -1);
 
         if (taskId == -1)
         {
             // if the task lookup has failed for whatever reason,
             // then we revert back to taskdashboard screen.
             GenericUtils.switchFragment(this, new TaskDashboardFragment(), false);
+            return;
         }
 
         userVm = new ViewModelProvider(requireActivity()).get(UserViewModel.class);
@@ -95,6 +96,7 @@ public class TaskFragment extends Fragment {
         {
             // user has become logged out at some point, revert to login screen, do not save progress
             GenericUtils.switchFragment(this, new LoginFragment(), false);
+            return;
         }
     }
 
@@ -155,6 +157,22 @@ public class TaskFragment extends Fragment {
                                 new TaskDashboardFragment(), true);
                     });
 
+                    submitButton.setOnClickListener(c ->
+                    {
+                        // awful solution but not much i can do without big refactors
+                        // because of how we've hard coded the questions into the program
+                        int id1 = optionsGroup1.getCheckedRadioButtonId();
+                        int id2 = optionsGroup2.getCheckedRadioButtonId();
+                        int id3 = optionsGroup3.getCheckedRadioButtonId();
+
+                        int ans1 = (id1 == R.id.option1a) ? 0 : (id1 == R.id.option1b) ? 1 : (id1 == R.id.option1c) ? 2 : -1;
+                        int ans2 = (id2 == R.id.option2a) ? 0 : (id2 == R.id.option2b) ? 1 : (id2 == R.id.option2c) ? 2 : -1;
+                        int ans3 = (id3 == R.id.option3a) ? 0 : (id3 == R.id.option3b) ? 1 : (id3 == R.id.option3c) ? 2 : -1;
+
+                        GenericUtils.switchFragment(TaskFragment.this,
+                                ResultsFragment.newInstance(ans1, ans2, ans3, taskId), false);
+                    });
+
                     List<Question> questions = taskItem.questions;
                     if (questions != null && questions.size() >= 3) {
                         // sort by order index to ensure correct sequence
@@ -171,6 +189,8 @@ public class TaskFragment extends Fragment {
                         option1a.setText(q1.getOptionA());
                         option1b.setText(q1.getOptionB());
                         option1c.setText(q1.getOptionC());
+                        hintButton1.setOnClickListener(c ->
+                                HintFragment.newInstance(q1.getHint()).show(getParentFragmentManager(), "q1-hint"));
 
                         // q2
                         Question q2 = questions.get(1);
@@ -178,6 +198,8 @@ public class TaskFragment extends Fragment {
                         option2a.setText(q2.getOptionA());
                         option2b.setText(q2.getOptionB());
                         option2c.setText(q2.getOptionC());
+                        hintButton2.setOnClickListener(c ->
+                                HintFragment.newInstance(q2.getHint()).show(getParentFragmentManager(), "q2-hint"));
 
                         // q3
                         Question q3 = questions.get(2);
@@ -185,6 +207,8 @@ public class TaskFragment extends Fragment {
                         option3a.setText(q3.getOptionA());
                         option3b.setText(q3.getOptionB());
                         option3c.setText(q3.getOptionC());
+                        hintButton3.setOnClickListener(c ->
+                                HintFragment.newInstance(q3.getHint()).show(getParentFragmentManager(), "q3-hint"));
                     }
                 });
             }

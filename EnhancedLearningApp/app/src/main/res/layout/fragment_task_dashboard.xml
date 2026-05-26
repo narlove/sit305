@@ -53,14 +53,29 @@
         android:layout_weight="1"
         tools:listitem="@android:layout/simple_list_item_1" />
 
-    <Button
-        android:id="@+id/generateTaskButton"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="@color/btn_good_green"
-        android:text="Generate task"
-        android:textColor="@color/white" />
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/generateTaskButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/btn_good_green"
+            android:text="Generate task"
+            android:textColor="@color/white" />
+
+        <ProgressBar
+            android:id="@+id/generateTaskProgressBar"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|start"
+            android:layout_marginStart="16dp"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone" />
+    </FrameLayout>
 
     <Button
         android:id="@+id/logoutButton"

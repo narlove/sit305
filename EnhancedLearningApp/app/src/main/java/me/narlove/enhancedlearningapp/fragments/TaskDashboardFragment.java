@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -46,7 +47,6 @@ import me.narlove.enhancedlearningapp.datatypes.User;
 import me.narlove.enhancedlearningapp.persistence.DatabaseViewModel;
 import me.narlove.enhancedlearningapp.recycler.CustomAdapter;
 import me.narlove.enhancedlearningapp.utilities.GenericUtils;
-import me.narlove.enhancedlearningapp.utilities.InterestConversionHandler;
 import me.narlove.enhancedlearningapp.utilities.UserViewModel;
 
 public class TaskDashboardFragment extends Fragment {
@@ -56,6 +56,7 @@ public class TaskDashboardFragment extends Fragment {
     private TextView taskBannerText;
     private RecyclerView recyclerView;
     private Button generateTaskButton;
+    private ProgressBar generateTaskProgressBar;
     private Button goBackButton;
 
     private DatabaseViewModel dbvm;
@@ -126,6 +127,7 @@ public class TaskDashboardFragment extends Fragment {
         taskBannerText = v.findViewById(R.id.taskBannerText);
         recyclerView = v.findViewById(R.id.taskRecyclerView);
         generateTaskButton = v.findViewById(R.id.generateTaskButton);
+        generateTaskProgressBar = v.findViewById(R.id.generateTaskProgressBar);
         goBackButton = v.findViewById(R.id.logoutButton);
 
         titleText.setText(String.format("Hello, %s", currentUser.getName()));
@@ -178,9 +180,15 @@ public class TaskDashboardFragment extends Fragment {
         generateTaskButton.setOnClickListener(clicked ->
         {
             List<Interest> userInterests = currentUser.getInterests();
+            if (userInterests == null || userInterests.isEmpty()) return;
+            
             Interest selectedInterest = userInterests.get(
                     new Random().nextInt(userInterests.size())
             );
+
+            // Disable button and show spinner
+            generateTaskButton.setEnabled(false);
+            generateTaskProgressBar.setVisibility(VISIBLE);
 
             Gson gson = new Gson();
 
@@ -207,24 +215,21 @@ public class TaskDashboardFragment extends Fragment {
                     new FutureCallback<GenerateContentResponse>() {
                         @Override
                         public void onSuccess(GenerateContentResponse result) {
-                            Log.i("narloveapp", "success callback");
-                            String response = result.getText();
-                            Question[] questions = gson.fromJson(response, Question[].class);
+                            String res = result.getText();
+                            Question[] questions = gson.fromJson(res, Question[].class);
 
-                            // could probably put this in a loop with a dictionary or something,
-                            // can't really be bothered lowk.
                             Question genQuestion1 = questions[0];
                             genQuestion1.setOrderIndex(0);
                             Question genQuestion2 = questions[1];
-                            genQuestion1.setOrderIndex(1);
+                            genQuestion2.setOrderIndex(1);
                             Question genQuestion3 = questions[2];
-                            genQuestion1.setOrderIndex(2);
+                            genQuestion3.setOrderIndex(2);
 
                             Task generatedTask = new Task(
                                     currentUser.getUserId(),
                                     selectedInterest,
                                     prompt,
-                                    response,
+                                    res,
                                     String.format("This task focuses on improving your %s skills.",
                                             Interest.getFrontendCompatible(selectedInterest))
                             );
@@ -234,6 +239,13 @@ public class TaskDashboardFragment extends Fragment {
                                     genQuestion2,
                                     genQuestion3
                                     ));
+
+                            if (isAdded()) {
+                                requireActivity().runOnUiThread(() -> {
+                                    generateTaskButton.setEnabled(true);
+                                    generateTaskProgressBar.setVisibility(GONE);
+                                });
+                            }
                         }
 
                         @Override

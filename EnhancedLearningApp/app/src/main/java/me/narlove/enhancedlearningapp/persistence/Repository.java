@@ -13,8 +13,10 @@ import me.narlove.enhancedlearningapp.datatypes.Interest;
 import me.narlove.enhancedlearningapp.datatypes.Question;
 import me.narlove.enhancedlearningapp.datatypes.Task;
 import me.narlove.enhancedlearningapp.datatypes.User;
+import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyQuestionCallback;
 import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUserIdCallback;
 import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUsernameExistsCallback;
+import me.narlove.enhancedlearningapp.persistence.daos.QuestionDao;
 import me.narlove.enhancedlearningapp.persistence.daos.TaskDao;
 import me.narlove.enhancedlearningapp.persistence.daos.UserDao;
 import me.narlove.enhancedlearningapp.persistence.datatypes.TaskWithQuestions;
@@ -25,6 +27,7 @@ import me.narlove.enhancedlearningapp.utilities.InterestConversionHandler;
 public class Repository {
     private final UserDao userDao;
     private final TaskDao taskDao;
+    private final QuestionDao questionDao;
     private final LiveData<List<User>> users;
     private final Executor executor = Executors.newSingleThreadExecutor();
 
@@ -36,6 +39,7 @@ public class Repository {
                 .build();
         this.userDao = db.userDao();
         this.taskDao = db.taskDao();
+        this.questionDao = db.questionDao();
 
         this.users = this.userDao.getAllUsers();
     }
@@ -154,5 +158,22 @@ public class Repository {
     public LiveData<Integer> getNumberOfTasksByUserId(long uid)
     {
         return this.taskDao.getNumberOfTasksByUserId(uid);
+    }
+
+    public void getQuestionByQuestionId(long questionId,
+                                            IdentifyQuestionCallback callback)
+    {
+        executor.execute(() ->
+        {
+            Question q = this.questionDao.getQuestionById(questionId);
+            if (q != null)
+            {
+                callback.onSuccess(q);
+            }
+            else
+            {
+                callback.onFailure();
+            }
+        });
     }
 }

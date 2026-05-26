@@ -12,6 +12,7 @@ import me.narlove.enhancedlearningapp.datatypes.Interest;
 import me.narlove.enhancedlearningapp.datatypes.Question;
 import me.narlove.enhancedlearningapp.datatypes.Task;
 import me.narlove.enhancedlearningapp.datatypes.User;
+import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyQuestionCallback;
 import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUserIdCallback;
 import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUsernameExistsCallback;
 import me.narlove.enhancedlearningapp.persistence.datatypes.TaskWithQuestions;
@@ -103,5 +104,11 @@ public class DatabaseViewModel extends AndroidViewModel {
     public LiveData<Integer> getNumberOfTasksByUserId(long uid)
     {
         return this.repo.getNumberOfTasksByUserId(uid);
+    }
+
+    public void getQuestionByQuestionId(long questionId,
+                                        IdentifyQuestionCallback callback)
+    {
+        this.repo.getQuestionByQuestionId(questionId, callback);
     }
 }

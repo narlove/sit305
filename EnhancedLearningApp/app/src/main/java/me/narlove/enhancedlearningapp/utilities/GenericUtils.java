@@ -19,6 +19,10 @@ public class GenericUtils {
         {
             transaction.addToBackStack(null);
         }
+        else
+        {
+            manager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        }
 
         transaction.commit();
     }

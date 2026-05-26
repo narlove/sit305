@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="btn_good_green">#4CAF50</color>
     <color name="btn_go_back">#9E9E9E</color>
+    <color name="answer_correct">#6EDB74</color>
+    <color name="answer_incorrect">#FA736F</color>
 </resources>
