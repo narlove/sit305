@@ -14,13 +14,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:visibility="gone"
         app:cardBackgroundColor="#E3F2FD"
         app:cardCornerRadius="12dp"
         app:cardElevation="4dp"
         app:strokeColor="#2196F3"
-        app:strokeWidth="1dp"
-        tools:visibility="visible">
+        app:strokeWidth="1dp">
 
         <TextView
             android:id="@+id/promptTaskBannerText"

@@ -142,6 +142,19 @@ public class TaskFragment extends Fragment {
                     taskTitle.setText(String.format("Generated Task %d", taskItem.task.getTaskId()));
                     taskDescription.setText(taskItem.task.getTaskDesc());
 
+                    taskBanner.setOnClickListener(clicked ->
+                    {
+                        PromptInfoFragment infoFrag = PromptInfoFragment.newInstance(taskItem.task.getGenPrompt(),
+                                taskItem.task.getGenRes());
+                        infoFrag.show(getParentFragmentManager(), "prompt-info-fragment");
+                    });
+
+                    backButton.setOnClickListener(clicked ->
+                    {
+                        GenericUtils.switchFragment(TaskFragment.this,
+                                new TaskDashboardFragment(), true);
+                    });
+
                     List<Question> questions = taskItem.questions;
                     if (questions != null && questions.size() >= 3) {
                         // sort by order index to ensure correct sequence

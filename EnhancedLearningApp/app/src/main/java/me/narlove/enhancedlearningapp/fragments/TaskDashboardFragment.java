@@ -242,11 +242,6 @@ public class TaskDashboardFragment extends Fragment {
                         }
                     },
                     executor);
-
-            // TODO: by keeping track of the prompt that we asked the model in a string
-            // and by ensuring that we store the LLMs massive response in another variable
-            // we can set the genPrompt and genRes variables of the task constructor.
-            // we may have to reprompt the ai to
         });
 
         return v;
