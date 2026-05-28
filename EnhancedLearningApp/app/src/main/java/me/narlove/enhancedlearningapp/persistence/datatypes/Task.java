@@ -1,4 +1,4 @@
-package me.narlove.enhancedlearningapp.datatypes;
+package me.narlove.enhancedlearningapp.persistence.datatypes;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +8,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import me.narlove.enhancedlearningapp.Interest;
 import me.narlove.enhancedlearningapp.utilities.InterestConversionHandler;
 
 @Entity(tableName = "task")

@@ -1,6 +1,4 @@
-package me.narlove.enhancedlearningapp.datatypes;
-
-import androidx.room.TypeConverter;
+package me.narlove.enhancedlearningapp;
 
 import me.narlove.enhancedlearningapp.utilities.GenericUtils;
 import me.narlove.enhancedlearningapp.utilities.InterestConversionHandler;

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import me.narlove.enhancedlearningapp.datatypes.Interest;
+import me.narlove.enhancedlearningapp.Interest;
 
 public class InterestConversionHandler {
     private static final String SEPARATOR = ",";

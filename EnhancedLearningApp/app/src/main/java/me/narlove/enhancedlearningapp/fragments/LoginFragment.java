@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.DatabaseView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import me.narlove.enhancedlearningapp.R;
-import me.narlove.enhancedlearningapp.datatypes.User;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUserCallback;
+import me.narlove.enhancedlearningapp.persistence.datatypes.User;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyUserCallback;
 import me.narlove.enhancedlearningapp.persistence.DatabaseViewModel;
 import me.narlove.enhancedlearningapp.utilities.GenericUtils;
 import me.narlove.enhancedlearningapp.utilities.UserViewModel;

@@ -15,8 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 import java.util.ArrayList;
 
 import me.narlove.enhancedlearningapp.R;
-import me.narlove.enhancedlearningapp.datatypes.User;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUsernameExistsCallback;
+import me.narlove.enhancedlearningapp.persistence.datatypes.User;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyUsernameExistsCallback;
 import me.narlove.enhancedlearningapp.persistence.DatabaseViewModel;
 import me.narlove.enhancedlearningapp.utilities.GenericUtils;
 

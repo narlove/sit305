@@ -8,8 +8,8 @@ import androidx.room.Transaction;
 
 import java.util.List;
 
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.Task;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Task;
 import me.narlove.enhancedlearningapp.persistence.datatypes.TaskWithQuestions;
 
 @Dao

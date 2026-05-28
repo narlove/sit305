@@ -27,8 +27,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import me.narlove.enhancedlearningapp.R;
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyQuestionCallback;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyQuestionCallback;
 import me.narlove.enhancedlearningapp.persistence.DatabaseViewModel;
 
 public class ExplanationFragment extends DialogFragment {

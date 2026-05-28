@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import me.narlove.enhancedlearningapp.datatypes.User;
+import me.narlove.enhancedlearningapp.persistence.datatypes.User;
 
 public class UserViewModel extends ViewModel {
     MutableLiveData<User> currentUser = new MutableLiveData<>();

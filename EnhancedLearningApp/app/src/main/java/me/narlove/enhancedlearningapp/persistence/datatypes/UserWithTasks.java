@@ -5,9 +5,6 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-import me.narlove.enhancedlearningapp.datatypes.Task;
-import me.narlove.enhancedlearningapp.datatypes.User;
-
 public class UserWithTasks {
     @Embedded
     public User user;

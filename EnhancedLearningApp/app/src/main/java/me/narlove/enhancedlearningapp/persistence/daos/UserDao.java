@@ -5,13 +5,10 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
-import androidx.room.TypeConverters;
 
 import java.util.List;
 
-import me.narlove.enhancedlearningapp.datatypes.Interest;
-import me.narlove.enhancedlearningapp.datatypes.User;
-import me.narlove.enhancedlearningapp.utilities.InterestConversionHandler;
+import me.narlove.enhancedlearningapp.persistence.datatypes.User;
 
 @Dao
 public interface UserDao {

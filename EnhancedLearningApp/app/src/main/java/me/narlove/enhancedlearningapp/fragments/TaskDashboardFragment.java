@@ -40,10 +40,10 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import me.narlove.enhancedlearningapp.R;
-import me.narlove.enhancedlearningapp.datatypes.Interest;
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.Task;
-import me.narlove.enhancedlearningapp.datatypes.User;
+import me.narlove.enhancedlearningapp.Interest;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Task;
+import me.narlove.enhancedlearningapp.persistence.datatypes.User;
 import me.narlove.enhancedlearningapp.persistence.DatabaseViewModel;
 import me.narlove.enhancedlearningapp.recycler.CustomAdapter;
 import me.narlove.enhancedlearningapp.utilities.GenericUtils;

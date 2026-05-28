@@ -5,9 +5,6 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.Task;
-
 public class TaskWithQuestions {
     @Embedded
     public Task task;

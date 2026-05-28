@@ -1,4 +1,4 @@
-package me.narlove.enhancedlearningapp.datatypes.callbacks;
+package me.narlove.enhancedlearningapp.callbacks;
 
 public interface IdentifyUsernameExistsCallback {
     void onUsernameExists();

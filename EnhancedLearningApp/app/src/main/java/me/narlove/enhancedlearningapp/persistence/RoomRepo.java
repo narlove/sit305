@@ -9,29 +9,30 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import me.narlove.enhancedlearningapp.datatypes.Interest;
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.Task;
-import me.narlove.enhancedlearningapp.datatypes.User;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyQuestionCallback;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUserIdCallback;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUsernameExistsCallback;
+import me.narlove.enhancedlearningapp.Interest;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Task;
+import me.narlove.enhancedlearningapp.persistence.datatypes.User;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyQuestionCallback;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyUserIdCallback;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyUsernameExistsCallback;
 import me.narlove.enhancedlearningapp.persistence.daos.QuestionDao;
 import me.narlove.enhancedlearningapp.persistence.daos.TaskDao;
 import me.narlove.enhancedlearningapp.persistence.daos.UserDao;
+import me.narlove.enhancedlearningapp.persistence.datatypes.IRepository;
 import me.narlove.enhancedlearningapp.persistence.datatypes.TaskWithQuestions;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyTaskAndQuestionsCallback;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyUserCallback;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyTaskAndQuestionsCallback;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyUserCallback;
 import me.narlove.enhancedlearningapp.utilities.InterestConversionHandler;
 
-public class Repository {
+public class RoomRepo implements IRepository {
     private final UserDao userDao;
     private final TaskDao taskDao;
     private final QuestionDao questionDao;
     private final LiveData<List<User>> users;
     private final Executor executor = Executors.newSingleThreadExecutor();
 
-    public Repository(Application app) {
+    public RoomRepo(Application app) {
         AppDatabase db = Room.databaseBuilder(
                         app,
                         AppDatabase.class,

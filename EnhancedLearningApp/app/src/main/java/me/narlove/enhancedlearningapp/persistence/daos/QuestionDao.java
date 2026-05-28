@@ -1,10 +1,9 @@
 package me.narlove.enhancedlearningapp.persistence.daos;
 
 import androidx.room.Dao;
-import androidx.room.Insert;
 import androidx.room.Query;
 
-import me.narlove.enhancedlearningapp.datatypes.Question;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
 
 @Dao
 public interface QuestionDao {

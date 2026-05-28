@@ -16,18 +16,13 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.card.MaterialCardView;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import me.narlove.enhancedlearningapp.R;
-import me.narlove.enhancedlearningapp.datatypes.Interest;
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.Task;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyTaskAndQuestionsCallback;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyTaskAndQuestionsCallback;
 import me.narlove.enhancedlearningapp.persistence.DatabaseViewModel;
 import me.narlove.enhancedlearningapp.persistence.datatypes.TaskWithQuestions;
 import me.narlove.enhancedlearningapp.utilities.GenericUtils;

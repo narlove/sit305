@@ -1,14 +1,7 @@
-package me.narlove.enhancedlearningapp.datatypes;
+package me.narlove.enhancedlearningapp.api.datatypes;
 
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
-@Entity(tableName = "question")
-public class Question {
-    @PrimaryKey(autoGenerate = true)
-    private long questionId;
-    // FK
-    private long owningTaskId;
+public class MongoQuestion {
+    private String questionId;
     private String questionText;
     private String optionA;
     private String optionB;
@@ -17,7 +10,7 @@ public class Question {
     private String hint;
     private int orderIndex;
 
-    public Question(String questionText, String optionA, String optionB, String optionC, int correctOption, String hint, int orderIndex) {
+    public MongoQuestion(String questionText, String optionA, String optionB, String optionC, int correctOption, String hint, int orderIndex) {
         this.questionText = questionText;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -27,20 +20,12 @@ public class Question {
         this.orderIndex = orderIndex;
     }
 
-    public long getQuestionId() {
+    public String getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(long questionId) {
+    public void setQuestionId(String questionId) {
         this.questionId = questionId;
-    }
-
-    public long getOwningTaskId() {
-        return owningTaskId;
-    }
-
-    public void setOwningTaskId(long owningTaskId) {
-        this.owningTaskId = owningTaskId;
     }
 
     public String getQuestionText() {

@@ -3,9 +3,9 @@ package me.narlove.enhancedlearningapp.persistence;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.Task;
-import me.narlove.enhancedlearningapp.datatypes.User;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Task;
+import me.narlove.enhancedlearningapp.persistence.datatypes.User;
 import me.narlove.enhancedlearningapp.persistence.daos.QuestionDao;
 import me.narlove.enhancedlearningapp.persistence.daos.TaskDao;
 import me.narlove.enhancedlearningapp.persistence.daos.UserDao;

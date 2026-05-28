@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import me.narlove.enhancedlearningapp.R;
-import me.narlove.enhancedlearningapp.datatypes.Task;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Task;
 
 public class CustomAdapter extends ListAdapter<Task, CustomAdapter.ViewHolder>
 {

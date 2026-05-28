@@ -1,4 +1,4 @@
-package me.narlove.enhancedlearningapp.datatypes.callbacks;
+package me.narlove.enhancedlearningapp.callbacks;
 
 import me.narlove.enhancedlearningapp.persistence.datatypes.TaskWithQuestions;
 

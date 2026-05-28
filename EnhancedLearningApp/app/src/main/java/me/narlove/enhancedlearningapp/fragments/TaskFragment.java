@@ -10,7 +10,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -21,8 +20,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import me.narlove.enhancedlearningapp.R;
-import me.narlove.enhancedlearningapp.datatypes.Question;
-import me.narlove.enhancedlearningapp.datatypes.callbacks.IdentifyTaskAndQuestionsCallback;
+import me.narlove.enhancedlearningapp.persistence.datatypes.Question;
+import me.narlove.enhancedlearningapp.callbacks.IdentifyTaskAndQuestionsCallback;
 import me.narlove.enhancedlearningapp.persistence.DatabaseViewModel;
 import me.narlove.enhancedlearningapp.persistence.datatypes.TaskWithQuestions;
 import me.narlove.enhancedlearningapp.utilities.GenericUtils;
