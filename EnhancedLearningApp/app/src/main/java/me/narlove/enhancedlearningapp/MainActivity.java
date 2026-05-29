@@ -9,8 +9,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.ViewModelProvider;
 
+import me.narlove.enhancedlearningapp.api.ApiViewModel;
 import me.narlove.enhancedlearningapp.fragments.LoginFragment;
+import me.narlove.enhancedlearningapp.persistence.MongoRepo;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        ApiViewModel vm = new ViewModelProvider(this).get(ApiViewModel.class);
+        MongoRepo.assignViewModel(vm);
 
         switchFragment(this, new LoginFragment(), false);
     }

@@ -37,6 +37,21 @@ public class User {
         this.interests = interests;
     }
 
+    // second constructor for converting a usermodel to user in apidatatypemapper
+    // this one will be ignored by room so that if we decide we want to swap dbs back over
+    // from mongo to room, nothing should break and no additional changes should be required
+    // bar what is in the DatabaseViewModel.
+    public User(long id, String username, String name, String password, String email, String phoneNumber,
+                @NotNull List<Interest> interests) {
+        this.userId = id;
+        this.username = username;
+        this.name = name;
+        this.password = password;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.interests = interests;
+    }
+
     public long getUserId() {
         return userId;
     }

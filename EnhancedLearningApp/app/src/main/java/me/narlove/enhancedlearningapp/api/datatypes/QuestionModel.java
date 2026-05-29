@@ -1,7 +1,7 @@
 package me.narlove.enhancedlearningapp.api.datatypes;
 
-public class MongoQuestion {
-    private String questionId;
+public class QuestionModel {
+    private long questionId;
     private String questionText;
     private String optionA;
     private String optionB;
@@ -10,7 +10,7 @@ public class MongoQuestion {
     private String hint;
     private int orderIndex;
 
-    public MongoQuestion(String questionText, String optionA, String optionB, String optionC, int correctOption, String hint, int orderIndex) {
+    public QuestionModel(String questionText, String optionA, String optionB, String optionC, int correctOption, String hint, int orderIndex) {
         this.questionText = questionText;
         this.optionA = optionA;
         this.optionB = optionB;
@@ -20,11 +20,11 @@ public class MongoQuestion {
         this.orderIndex = orderIndex;
     }
 
-    public String getQuestionId() {
+    public long getQuestionId() {
         return questionId;
     }
 
-    public void setQuestionId(String questionId) {
+    public void setQuestionId(long questionId) {
         this.questionId = questionId;
     }
 

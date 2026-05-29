@@ -1,6 +1,7 @@
 package me.narlove.enhancedlearningapp.persistence.datatypes;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "question")
@@ -18,6 +19,19 @@ public class Question {
     private int orderIndex;
 
     public Question(String questionText, String optionA, String optionB, String optionC, int correctOption, String hint, int orderIndex) {
+        this.questionText = questionText;
+        this.optionA = optionA;
+        this.optionB = optionB;
+        this.optionC = optionC;
+        this.correctOption = correctOption;
+        this.hint = hint;
+        this.orderIndex = orderIndex;
+    }
+
+    @Ignore
+    public Question(long questionId, long owningTaskId, String questionText, String optionA, String optionB, String optionC, int correctOption, String hint, int orderIndex) {
+        this.questionId = questionId;
+        this.owningTaskId = owningTaskId;
         this.questionText = questionText;
         this.optionA = optionA;
         this.optionB = optionB;

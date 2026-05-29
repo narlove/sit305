@@ -31,6 +31,16 @@ public class Task {
         this.taskDesc = taskDesc;
     }
 
+    @Ignore
+    public Task(long taskId, long owningUserId, Interest interest, String genPrompt, String genRes, String taskDesc) {
+        this.taskId = taskId;
+        this.owningUserId = owningUserId;
+        this.interest = interest;
+        this.genPrompt = genPrompt;
+        this.genRes = genRes;
+        this.taskDesc = taskDesc;
+    }
+
     // boilerplate on overriding the equals method
     // https://www.sitepoint.com/implement-javas-equals-method-correctly/
     // to be used in the customviewadapter diffcallback

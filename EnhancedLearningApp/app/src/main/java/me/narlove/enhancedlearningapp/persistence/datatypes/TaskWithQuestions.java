@@ -14,4 +14,15 @@ public class TaskWithQuestions {
             entityColumn = "owningTaskId"
     )
     public List<Question> questions;
+
+    public TaskWithQuestions()
+    {
+
+    }
+
+    public TaskWithQuestions(Task task, List<Question> questions)
+    {
+        this.task = task;
+        this.questions = questions;
+    }
 }

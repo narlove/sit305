@@ -27,7 +27,7 @@ public class DatabaseViewModel extends AndroidViewModel {
 
         // swap this and we can change in and out of mongo and room very easily
         // ensure you're changing datatypes from original version to Mongo version
-        this.repo = new RoomRepo(application);
+        this.repo = new MongoRepo();
     }
 
     public void getUserByUsername(String username, IdentifyUserCallback callback)

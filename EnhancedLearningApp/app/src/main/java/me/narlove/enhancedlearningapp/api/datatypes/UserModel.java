@@ -9,9 +9,9 @@ import java.util.List;
 
 import me.narlove.enhancedlearningapp.Interest;
 
-public class MongoUser {
+public class UserModel {
     @SerializedName("_id")
-    private String userId;
+    private long userId;
     // no duplicates -> used for lookup in authentication flow
     private String username;
     private String name;
@@ -21,11 +21,11 @@ public class MongoUser {
     private List<Interest> interests;
     // a few changes need to be made like this one
     // as tasks are now embedded in user, not referenced by them
-    private List<MongoTask> tasks;
+    private List<TaskModel> tasks;
 
     // interests cannot be null, can be empty
-    public MongoUser(String username, String name, String password, String email, String phone,
-                     @NotNull List<Interest> interests, @NotNull List<MongoTask> tasks) {
+    public UserModel(String username, String name, String password, String email, String phone,
+                     @NotNull List<Interest> interests, @NotNull List<TaskModel> tasks) {
         this.username = username;
         this.name = name;
         this.password = password;
@@ -35,11 +35,11 @@ public class MongoUser {
         this.tasks = tasks;
     }
 
-    public String getUserId() {
+    public long getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(long userId) {
         this.userId = userId;
     }
 
@@ -91,11 +91,11 @@ public class MongoUser {
         this.interests = interests;
     }
 
-    public List<MongoTask> getTasks() {
+    public List<TaskModel> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<MongoTask> tasks) {
+    public void setTasks(List<TaskModel> tasks) {
         this.tasks = tasks;
     }
 }
